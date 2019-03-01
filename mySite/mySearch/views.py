@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.db.models import Q
 from django.http import HttpResponse
 from .models import (profile)
-
+import pymysql
+pymysql.install_as_MySQLdb()
 def searchPosts(request):
 	if request.method == 'GET':
 		query = request.GET.get('searchResult')
