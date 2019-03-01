@@ -14,3 +14,6 @@ class serviceRequest(models.Model):
 	
 	def __str__(self):
 		return self.title
+
+class User(models.Model):
+	pass

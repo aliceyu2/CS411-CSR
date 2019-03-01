@@ -8,8 +8,9 @@ def searchPosts(request):
 		query = request.GET.get('searchResult')
 		submitButton = request.GET.get('submit')
 		if query is not None:
-			lookups = Q(emailAddress__icontains=query) | Q(content__icontains=query)
-			results = profile.objects.filter(lookups).distinct()
+			#lookups = Q(emailAddress__icontains=query) | Q(watchList__icontains=query)
+			#results = profile.objects.filter(lookups).distinct()
+			results = profile.objects.filter(emailAddress=query).distinct()
 			print(results)
 			context = {'results': results, 'submitButton': submitButton}
 			return render(request, 'searchPage.html', context)
