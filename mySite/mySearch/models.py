@@ -6,6 +6,9 @@ class profile(models.Model):
 	watchList = models.TextField()
 	radius = models.IntegerField()
 	
+	class Meta:
+		db_table = "Profile"
+	
 	def __str__(self):
 		return self.emailAddress
 
