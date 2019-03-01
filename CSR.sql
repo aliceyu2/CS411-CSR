@@ -20,6 +20,10 @@ CREATE TABLE User (
 	resident_registrationCode varChar(255),
 	emailAddress varChar(255),
 	password varChar(255) NOT NULL,
+	address varChar(255),
+	zipCode INT,
+	city TEXT,
+	myState TEXT,
 	PRIMARY KEY (emailAddress)
 );
 
@@ -27,32 +31,24 @@ CREATE TABLE User (
 CREATE TABLE ServiceRequest (
 	requestNumber varChar(255),
 	creationDate DATE NOT NULL,
-	completionDate DATE NOT NULL,
+	completionDate DATE,
 	requestType TEXT NOT NULL,
 	status TEXT NOT NULL,
 	priority INT,
+	address varChar(255),
+	zipCode INT,
+	city TEXT,
+	myState TEXT,
 	PRIMARY KEY (requestNumber)
 );
 
 -- Create the VehicleRequest table
 CREATE TABLE VehicleRequest (
-	requestNumber varChar(255),
+	Vid varChar(255) REFERENCES ServiceRequest(requestNumber),
 	build TEXT,
 	color TEXT,
 	make TEXT,
-	licensePlate varChar(255),
-	PRIMARY KEY (requestNumber)
-);
-
--- Create the Location table
-CREATE TABLE Location (
-	streetNumber INT,
-	streetName varChar(255),
-	zipCode INT,
-	city TEXT,
-	myState TEXT,
-	id INT,
-	PRIMARY KEY (streetNumber, streetName, zipCode)
+	licensePlate varChar(255)
 );
 
 -- Create the Alert table
