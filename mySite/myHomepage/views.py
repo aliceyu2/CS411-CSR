@@ -1,3 +1,6 @@
 from django.shortcuts import render
-
-# Create your views here.
+from django.http import HttpResponse
+import pymysql
+pymysql.install_as_MySQLdb()
+def goToHomepage(request):
+	return render(request, 'homepage2.html')
