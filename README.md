@@ -1,2 +1,1 @@
-# CS411-CSR
-Repo containing all CSR code for CS 411
+# Simple Django web app that's able to sync with the DB and handle users, profile pages, logins, logouts, and registration.
