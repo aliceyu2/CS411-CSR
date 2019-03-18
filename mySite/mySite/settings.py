@@ -26,12 +26,14 @@ SECRET_KEY = 'xk6ylvxbxa%cg)&g6e^ymt%qlt)u&*stg$$z82x9u7ol304*dz'
 DEBUG = True
 
 #ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['sp19-cs411-12.cs.illinois.edu']
+ALLOWED_HOSTS = ['sp19-cs411-12.cs.illinois.edu','127.0.0.1',]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'crispy_forms',
+    'register.apps.RegisterConfig',
 	'mySearch.apps.MysearchConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
-
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -56,7 +58,7 @@ ROOT_URLCONF = 'mySite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'mySearch/template')],
+        'DIRS': [os.path.join(BASE_DIR, 'mySearch/template'),os.path.join(BASE_DIR, 'register/template')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'CSR',
 		'USER': 'root',
-		'PASSWORD': 'myPassword',
+		'PASSWORD': 'ryals25386',
 		'HOST': 'localhost',
 		'PORT': '3306',
     }
@@ -123,4 +125,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/register/template/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "register/template/"),
+]

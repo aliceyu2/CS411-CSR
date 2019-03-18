@@ -21,5 +21,6 @@ from django.urls import path
 
 urlpatterns = [
 	url(r'^mySearch/', include(('mySearch.urls', 'mySearch'), namespace='mySearch')),
+    url(r'register/',include('register.urls')),
     path('admin/', admin.site.urls),
 ]
