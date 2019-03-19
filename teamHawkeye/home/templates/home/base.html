@@ -29,7 +29,7 @@
 					<div class = "navbar-nav mr-auto">
 						<a class = "nav-item nav-link" href = "{% url 'home' %}">Home</a>
 						{% if user.is_authenticated %}
-							<a class = "nav-item nav-link" href="#">Service Requests</a>
+							<a class = "nav-item nav-link" href="{% url 'srHome' %}">Service Requests</a>
 						{% endif %}
 					</div>
 					<div class = "navbar-nav">
