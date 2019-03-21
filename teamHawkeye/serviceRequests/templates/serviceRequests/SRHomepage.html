@@ -1,12 +1,23 @@
 {% extends "serviceRequests/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <h2>This is the SR Homepage</h2>
-    <form method = "POST" style = "align-content:center;">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <div class = "form-group">
-            <button type = "submit" class = "btn btn-primary">Submit</button>
-        </div>
-    </form>
+    <h2 style = "text-align: center">This is the SR Homepage</h2>
+    <div style = "text-align: center">
+        <a href = "{% url 'srCreate' %}">Create a service request</a>
+    </div>
+    {% for request in requests %}
+        <article class = "media content-section">
+            <div class = "media-body">
+                <div class = "article-metadata">
+                    <a class = "mr-2" href = "#">{{ request.user }}</a>
+                    <small class = "text-muted">{{ request.date_created|date:"F d, Y" }}</small>
+                    <small class = "text-muted">{{ request.date_completed|date:"F d, Y" }}</small>
+                </div>
+                <h2>
+                    <a class = "article-title" href = "#">{{ request.requestNumber }}</a>
+                </h2>
+                <p class = "article-content">{{ request.requestStatus }}</p>
+            </div>
+        </article>
+    {% endfor %}
 {% endblock %}
