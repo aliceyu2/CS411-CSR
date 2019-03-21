@@ -17,7 +17,9 @@ def srCreate(request):
 	if request.method == 'POST':
 		form = createRequest(request.POST)
 		if form.is_valid():
-			form.save()
+			currentRequest = form.save(commit = False)
+			currentRequest.user = request.user
+			currentRequest.save()
 			messages.success(request, f'Your request has been created!')
 			return redirect('srHome')
 	else:
