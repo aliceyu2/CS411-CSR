@@ -10,10 +10,10 @@ with open("potHoles.csv",'r') as file:
     for i in data:
         crDate = datetime.datetime.strptime(i[0], "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
         if(i[2]==""):
-            allData.append(tuple([str(id),crDate,None,i[4],i[1],1,i[8],i[9],"Chicago","Illinois"]))
+            allData.append(tuple([str(id),crDate,None,i[4],i[1],1,i[8],i[9],"Chicago","Illinois",1]))
         else:
             comDate = datetime.datetime.strptime(i[2], "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m-%d')
-            allData.append(tuple([str(id), crDate, comDate, i[4], i[1], 1, i[8], int(i[9]), "Chicago","Illinois"]))
+            allData.append(tuple([str(id), crDate, comDate, i[4], i[1], 1, i[8], int(i[9]), "Chicago","Illinois",1]))
         id+=1
 print(allData)
 
@@ -21,12 +21,12 @@ mydb = mysql.connector.connect(
   host="localhost",
   user="root",
   passwd="ryals25386",
-  database="CSR"
+  database="teamHawkeye"
 )
-
+mydb.ping(True)
 mycursor = mydb.cursor()
 
-sql = "INSERT INTO servicerequest (requestNumber, creationDate,completionDate,requestType,status,priority,address,zipCode,city,myState) VALUES (%s, %s,%s, %s, %s, %s, %s, %s, %s, %s)"
+sql = "INSERT INTO servicerequests_request (reqNum, creationDate,compDate,requestType,status,priority,address,zipCode,city,State,user_id) VALUES (%s, %s,%s, %s, %s, %s, %s, %s, %s, %s,%s)"
 
 print(mycursor.executemany(sql,allData))
 
