@@ -8,7 +8,7 @@ from .models import Request
 @login_required
 def srHome(request):
 	context = {
-		'requests': Request.objects.all()
+		'requests': Request.objects.order_by('priority')[:10]
 	}
 	return render(request, 'serviceRequests/SRHomepage.html', context, { 'title': 'Service Requests Homepage' })
 
