@@ -3,14 +3,34 @@ from django.contrib import messages
 from .forms import createRequest
 from django.contrib.auth.decorators import login_required
 from .models import Request
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView
+)
 
 
 @login_required
 def srHome(request):
 	context = {
-		'requests': Request.objects.order_by('priority')[:10]
+		'requests': Request.objects.all()
 	}
 	return render(request, 'serviceRequests/SRHomepage.html', context, { 'title': 'Service Requests Homepage' })
+
+class srListView(ListView):
+	model = Request
+	template_name = 'serviceRequests/SRHomepage.html'
+	context_object_name = 'requests'
+	ordering = ['-priority']
+	paginate_by = 10
+
+class srDetailView(DetailView):
+	model = Request
+	template_name = 'serviceRequests/serviceRequest.html'
+	context_object_name = 'request'
+	paginate_by = 10
 
 @login_required
 def srCreate(request):
