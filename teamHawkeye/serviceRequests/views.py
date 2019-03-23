@@ -1,7 +1,3 @@
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .forms import createRequest
-from django.contrib.auth.decorators import login_required
 from .models import Request
 from django.views.generic import (
     ListView,
@@ -10,38 +6,57 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse_lazy
+from django.db import transaction
 
-
-@login_required
-def srHome(request):
-	context = {
-		'requests': Request.objects.all()
-	}
-	return render(request, 'serviceRequests/SRHomepage.html', context, { 'title': 'Service Requests Homepage' })
 
 class srListView(ListView):
 	model = Request
 	template_name = 'serviceRequests/SRHomepage.html'
 	context_object_name = 'requests'
-	ordering = ['-priority']
+	ordering = ['-requestNumber']
 	paginate_by = 10
 
 class srDetailView(DetailView):
 	model = Request
 	template_name = 'serviceRequests/serviceRequest.html'
 	context_object_name = 'request'
-	paginate_by = 10
 
-@login_required
-def srCreate(request):
-	if request.method == 'POST':
-		form = createRequest(request.POST)
-		if form.is_valid():
-			currentRequest = form.save(commit = False)
-			currentRequest.user = request.user
-			currentRequest.save()
-			messages.success(request, f'Your request has been created!')
-			return redirect('srHome')
-	else:
-		form = createRequest()
-	return render(request, 'serviceRequests/SRCreate.html', { 'title': 'Create a Service Request' , 'form': form})
+class srCreateView(LoginRequiredMixin, CreateView):
+	model = Request
+	template_name = 'serviceRequests/createRequest.html'
+	context_object_name = 'request'
+	fields = ['requestType', 'address', 'city', 'state', 'zipCode']
+	
+	def form_valid(self, form):
+		form.instance.user = self.request.user
+		return super().form_valid(form)
+
+class srUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+	model = Request
+	template_name = 'serviceRequests/createRequest.html'
+	context_object_name = 'request'
+	fields = ['requestType', 'address', 'city', 'state', 'zipCode']
+		
+	def form_valid(self, form):
+		form.instance.user = self.request.user
+		return super().form_valid(form)
+	
+	def test_func(self):
+		request = self.get_object()
+		if self.request.user == request.user:
+			return True
+		return False
+
+class srDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+	model = Request
+	template_name = 'serviceRequests/deleteRequest.html'
+	context_object_name = 'request'
+	success_url = reverse_lazy('srHome')
+	
+	def test_func(self):
+		request = self.get_object()
+		if self.request.user == request.user:
+			return True
+		return False

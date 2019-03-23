@@ -1,12 +1,17 @@
 from django.urls import path
 from .views import (
 	srListView,
-	srDetailView
+	srDetailView,
+	srCreateView,
+	srUpdateView,
+	srDeleteView
 )
 from . import views
 
 urlpatterns  =  [
-	path('', views.srListView.as_view(), name = "srHome"),
-	path('serviceRequest/<int:pk>/', views.srDetailView.as_view(), name = 'srDetail'),
-	path('create/', views.srCreate, name = "srCreate"),
+	path('', srListView.as_view(), name = "srHome"),
+	path('<int:pk>/', srDetailView.as_view(), name = 'srDetail'),
+	path('new/', srCreateView.as_view(), name = "srCreate"),
+	path('<int:pk>/update/', srUpdateView.as_view(), name = 'srUpdate'),
+	path('<int:pk>/delete/', srDeleteView.as_view(), name = 'srDelete'),
 ]
