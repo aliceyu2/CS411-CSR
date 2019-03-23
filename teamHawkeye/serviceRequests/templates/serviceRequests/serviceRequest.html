@@ -1,0 +1,15 @@
+{% extends "serviceRequests/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <article class = "media content-section">
+        <div class = "media-body">
+            <div class = "article-metadata">
+                <a class = "mr-2" href = "#">{{ request.user }}</a>
+                <small class = "text-muted">{{ request.creationDate|date:"F d, Y" }}</small>
+                <small class = "text-muted">{{ request.completionDate|date:"F d, Y" }}</small>
+            </div>
+            <h2 class =  "article-title">{{ request.requestNumber }}</h2>
+            <p class = "article-content">{{ request.status }}</p>
+        </div>
+    </article>
+{% endblock %}
