@@ -1,0 +1,19 @@
+<h1>Search Page</h1>
+<br/>
+<form id = "searchPage" action = "{% url 'mySearch:searchPosts' %}" method = "GET" value = "{{request.GET.searchResult}}">
+	Input the email address that is to be validated <input type = "text" name = "searchResult" value = "{{request.GET.searchResult}}" placeholder = "Search posts"/>
+	<input type = "submit" name = "submit" value = "Search"/>
+</form>
+
+{% if submitButton == 'Search' and request.GET.searchResult != "" %}
+{% if results %}
+<h1>There is a request for <b>{{ request.GET.searchResult }}</b></h1>
+<br/><br/>
+{% for result in results %}
+{{result.title}}
+<br/>
+{% endfor %}
+{% else %}
+<h1><b>No such result exists for your query</b></h1>
+{% endif %}
+{% endif %}
