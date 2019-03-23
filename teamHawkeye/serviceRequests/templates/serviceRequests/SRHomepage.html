@@ -2,21 +2,6 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <h2 style = "text-align: center">This is the SR Homepage</h2>
-	<div class = "container">
-		<div class = "row">
-			<div class = "col-12">
-				<div class = "input-group">
-					<input class = "form-control border-secondary py-2" type = "searchBar" value = "Search...">
-						<div class = "input-group-appdn">
-							<button type="button" class="btn btn-info">
-								<span class="glyphicon glyphicon-search"></span> Search
-							</button>
-						</div>
-					</input>
-				</div>
-			</div>
-		</div>
-	</div>
     <div style = "text-align: center">
         <a href = "{% url 'srCreate' %}">Create a service request</a>
     </div>
