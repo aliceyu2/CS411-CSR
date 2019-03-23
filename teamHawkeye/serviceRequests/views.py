@@ -15,7 +15,7 @@ class srListView(ListView):
 	model = Request
 	template_name = 'serviceRequests/SRHomepage.html'
 	context_object_name = 'requests'
-	ordering = ['-requestNumber']
+	ordering = ['-creationDate']
 	paginate_by = 10
 
 class srDetailView(DetailView):
