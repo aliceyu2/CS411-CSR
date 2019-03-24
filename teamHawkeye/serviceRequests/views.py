@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from .models import Request
 from django.views.generic import (
     ListView,
@@ -9,13 +10,16 @@ from django.views.generic import (
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.db import transaction
+from django.db.models import Q
+import pymysql
+pymysql.install_as_MySQLdb()
 
 
 class srListView(ListView):
 	model = Request
 	template_name = 'serviceRequests/SRHomepage.html'
 	context_object_name = 'requests'
-	ordering = ['-creationDate']
+	ordering = ['-requestNumber']
 	paginate_by = 10
 
 class srDetailView(DetailView):
@@ -60,3 +64,19 @@ class srDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 		if self.request.user == request.user:
 			return True
 		return False
+
+def srSearch(request):
+	if request.method == 'GET' and 'searchResult' in request.GET:
+		query = request.GET['searchResult']
+		if query:
+			reqNumQ = Q(requestNumber__icontains = query)
+			addrQ = Q(address__icontains = query)
+			cityQ = Q(city__icontains = query)
+			stateQ = Q(state__icontains = query)
+			zipQ = Q(zipCode__icontains = query)
+			results = Request.objects.filter(reqNumQ | addrQ | cityQ | stateQ | zipQ).distinct()
+			return render(request, 'serviceRequests/SRHomepage.html', {'results': results})
+		else:
+			return render(request, 'serviceRequests/SRHomepage.html')
+	else:
+		return render(request, 'serviceRequests/SRHomepage.html')
