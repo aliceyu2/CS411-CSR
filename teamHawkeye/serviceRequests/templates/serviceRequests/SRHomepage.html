@@ -2,22 +2,67 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <h2 style = "text-align: center">This is the SR Homepage</h2>
+	<div class = "container">
+		<div class = "row">
+			<div class = "col-12">
+				<form class = "input-group" name = "searchPage" action = "{% url 'srSearch' %}" method = "GET" value = "{{ request.GET.searchResult }}">
+					<input class = "form-control border-secondary py-2" name = "searchResult" value = "{{ request.GET.searchResult }}" placeholder = "Search by 1 of the following fields: Request Number, Address, City, State, Zip Code">
+						<div class = "input-group-appdn">
+							<button type = "button" class = "btn btn-info">
+								<span name = "submit" value = "Search" class = "glyphicon glyphicon-search"></span> Search
+							</button>
+						</div>
+					</input>
+				</form>
+			</div>
+		</div>
+	</div>
     <div style = "text-align: center">
         <a href = "{% url 'srCreate' %}">Create a service request</a>
     </div>
+	<h2>searchResult: {{ request.GET.searchResult }}</h2>
+	{% if request.GET.searchResult != "" %}
+		{% if results %}
+			{% for result in results %}
+				<p><b>{{ result.requestNumber }}</b><br/>{{ result.address }}<br/>{{ result.city }}, {{ result.state }}    {{ result.zipCode }}</p>
+			{% endfor %}
+		{% else %}
+			<h1><b>No such result exists for your query</b></h1>
+		{% endif %}
+	{% endif %}
     {% for request in requests %}
         <article class = "media content-section">
             <div class = "media-body">
                 <div class = "article-metadata">
-                    <a class = "mr-2" href = "#">{{ request.user }}</a>
-                    <small class = "text-muted">{{ request.date_created|date:"F d, Y" }}</small>
-                    <small class = "text-muted">{{ request.date_completed|date:"F d, Y" }}</small>
+                    <div class = "mr-2" style = "color: blue">{{ request.user }}</div>
+                    <small class = "text-muted">{{ request.creationDate|date:"F d, Y" }}</small>
+                    <small class = "text-muted">{{ request.completionDate|date:"F d, Y" }}</small>
                 </div>
                 <h2>
-                    <a class = "article-title" href = "#">{{ request.requestNumber }}</a>
+                    <a class = "article-title" href = "{% url 'srDetail' request.requestNumber %}">{{ request.requestNumber }}</a>
                 </h2>
-                <p class = "article-content">{{ request.requestStatus }}</p>
+                <p class = "article-content">{{ request.status }}</p>
+				<p class = "article-content">{{ request.address }}<br/>{{ request.city }}, {{ request.state }}    {{ request.zipCode }}</p>
             </div>
         </article>
     {% endfor %}
+    {% if is_paginated %}
+        <div style = "text-align: center" >
+            {% if page_obj.has_previous %}
+                <a class = "btn btn-outline-info mb-4" href = "?page=1">First</a>
+                <a class = "btn btn-outline-info mb-4" href = "?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <a class = "btn btn-info mb-4" href = "?page={{ num }}">{{ num }}</a>
+                {% elif num > page_obj.number|add:'-5' and num < page_obj.number|add:'3' %}
+                    <a class = "btn btn-outline-info mb-4" href = "?page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <a class = "btn btn-outline-info mb-4" href = "?page={{ page_obj.next_page_number }}">Next</a>
+                <a class = "btn btn-outline-info mb-4" href = "?page={{ page_obj.paginator.num_pages }}">Last</a>
+            {% endif %}
+        </div>
+    {% endif %}
 {% endblock %}

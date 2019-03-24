@@ -1,7 +1,19 @@
 from django.urls import path
+from .views import (
+	srListView,
+	srDetailView,
+	srCreateView,
+	srUpdateView,
+	srDeleteView,
+	srSearch
+)
 from . import views
 
 urlpatterns  =  [
-	path('', views.srHome, name = "srHome"),
-	path('create/', views.srCreate, name = "srCreate"),
+	path('', srListView.as_view(), name = "srHome"),
+	path('<int:pk>/', srDetailView.as_view(), name = 'srDetail'),
+	path('new/', srCreateView.as_view(), name = "srCreate"),
+	path('<int:pk>/update/', srUpdateView.as_view(), name = 'srUpdate'),
+	path('<int:pk>/delete/', srDeleteView.as_view(), name = 'srDelete'),
+	path('search/', srSearch, name = 'srSearch')
 ]

@@ -1,0 +1,12 @@
+{% extends "serviceRequests/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <h2>Create a Service Request</h2>
+    <form method = "POST" style = "align-content:center;">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class = "form-group">
+            <button type = "submit" class = "btn btn-primary">Submit</button>
+        </div>
+    </form>
+{% endblock %}
