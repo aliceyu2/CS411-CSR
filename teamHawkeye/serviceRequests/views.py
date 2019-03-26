@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Request
+from django.contrib.auth.decorators import login_required
 from django.views.generic import (
     ListView,
     DetailView,
@@ -15,17 +16,23 @@ import pymysql
 pymysql.install_as_MySQLdb()
 
 
-class srListView(ListView):
+class srListView(LoginRequiredMixin, ListView):
 	model = Request
 	template_name = 'serviceRequests/SRHomepage.html'
 	context_object_name = 'requests'
 	ordering = ['-requestNumber']
 	paginate_by = 10
 
-class srDetailView(DetailView):
+class srDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 	model = Request
 	template_name = 'serviceRequests/serviceRequest.html'
 	context_object_name = 'request'
+	
+	def test_func(self):
+		request = self.get_object()
+		if self.request.user == request.user:
+			return True
+		return False
 
 class srCreateView(LoginRequiredMixin, CreateView):
 	model = Request
@@ -65,6 +72,7 @@ class srDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 			return True
 		return False
 
+@login_required
 def srSearch(request):
 	if request.method == 'GET' and 'searchResult' in request.GET:
 		query = request.GET['searchResult']
