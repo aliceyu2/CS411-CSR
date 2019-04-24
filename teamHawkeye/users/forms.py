@@ -22,11 +22,12 @@ class UserRegisterForm(UserCreationForm):
 class ProfileUpdateForm(forms.ModelForm):
 	class Meta:
 		model = Profile
-		fields = ['firstName', 'lastName', 'address', 'city', 'state', 'zipCode', 'profile_pic']
+		fields = ['firstName', 'lastName', 'age', 'address', 'city', 'state', 'zipCode', 'profile_pic']
 		labels = {
 			"firstName": "First Name",
 			"lastName": "Last Name",
 			"address": "Address",
+			"age": "Age",
 			"city": "City",
 			"state": "State",
 			"zipCode": "Zip Code",

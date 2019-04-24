@@ -20,14 +20,14 @@
     <div style = "text-align: center">
         <a href = "{% url 'srCreate' %}">Create a service request</a>
     </div>
-	<h2>searchResult: {{ request.GET.searchResult }}</h2>
+	<!--
+        <h2>searchResult: {{ request.GET.searchResult }}</h2>
+    -->
 	{% if request.GET.searchResult != "" %}
 		{% if results %}
 			{% for result in results %}
 				<p><b>{{ result.requestNumber }}</b><br/>{{ result.address }}<br/>{{ result.city }}, {{ result.state }}    {{ result.zipCode }}</p>
 			{% endfor %}
-		{% else %}
-			<h1><b>No such result exists for your query</b></h1>
 		{% endif %}
 	{% endif %}
     {% for request in requests %}

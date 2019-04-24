@@ -83,6 +83,12 @@ def srSearch(request):
 			stateQ = Q(state__icontains = query)
 			zipQ = Q(zipCode__icontains = query)
 			results = Request.objects.filter(reqNumQ | addrQ | cityQ | stateQ | zipQ).distinct()
+			
+			'''
+			results = []
+			for result in Request.objects.raw('SELECT * FROM servicerequests_request WHERE requestNumber = ' + query + ' OR address = ' + query + ' OR city = ' + query + ' OR state = ' + query + ' OR zip = ' + query):
+				results.append(result)
+			'''
 			return render(request, 'serviceRequests/SRHomepage.html', {'results': results})
 		else:
 			return render(request, 'serviceRequests/SRHomepage.html')
