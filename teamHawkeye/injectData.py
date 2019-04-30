@@ -20,7 +20,7 @@ print(allData)
 mydb = pymysql.connect(
   host="localhost",
   user="root",
-  passwd="myPassword",
+  passwd="ryals25386",
   database="teamHawkeye"
 )
 mydb.ping(True)

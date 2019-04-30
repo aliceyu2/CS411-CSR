@@ -4,6 +4,13 @@ from django.utils import timezone
 from localflavor.us.us_states import STATE_CHOICES
 from django.urls import reverse
 from django.db import transaction
+from geopy.geocoders import Nominatim
+from django.contrib import messages
+from geopy.distance import distance
+from django.core.exceptions import ValidationError
+import sys, os
+from threading import Thread
+from serviceRequests.AlertThread import distanceCheck
 
 
 class Request(models.Model):
@@ -26,11 +33,26 @@ class Request(models.Model):
     def save(self, *args, **kwargs):
         if self.pk is None:
             with transaction.atomic():
+                Thread(target=distanceCheck, args=(self.__dict__,)).start()
                 oldReqNum = Request.objects.select_for_update(nowait=True).order_by('-requestNumber')[0]
                 self.requestNumber = oldReqNum.requestNumber + 1
                 super(Request, self).save(self, *args, **kwargs)
+
         else:
             super().save()
-    
+    def clean(self):
+        geolocator = Nominatim(user_agent="Team Hawkeye")
+        location = geolocator.geocode("{} {} {}".format(self.__dict__['address'], self.__dict__['city'], self.__dict__['state']))
+        if(location == None):
+            raise ValidationError("the location provided does not exist.")
     def get_absolute_url(self):
         return reverse('srDetail', kwargs={'pk': self.pk})
+
+class Alert(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    requestId = models.ForeignKey(Request, on_delete=models.PROTECT)
+    Sent = models.BooleanField(default=False)
+    DateSent = models.DateTimeField(null=True,blank=True)
+
+    class Meta:
+        unique_together = (('user', 'requestId'),)
