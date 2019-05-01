@@ -38,3 +38,16 @@ class Profile(models.Model):
 			output_size = (300, 300)
 			image.thumbnail(output_size)
 			image.save(self.profile_pic.path)
+
+
+class Document(models.Model):
+    @staticmethod
+    def search():
+        cursor = connection.cursor()
+        cursor.execute('''DROP PROCEDURE IF EXISTS servicerequest_count;''')
+        cursor.execute(
+            '''CREATE PROCEDURE servicerequest_count()   BEGIN	select count(*) from serviceRequests_request; END''')
+        cursor.callproc('servicerequest_count')
+        results = cursor.fetchall()
+        cursor.close()
+        return results

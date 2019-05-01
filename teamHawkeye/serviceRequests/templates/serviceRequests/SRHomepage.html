@@ -17,6 +17,11 @@
 			</div>
 		</div>
 	</div>
+    <div><button type="button" class="btn btn-success">Total Service Requests =
+            {% for servicerequestcnt in srcount %}
+            {{servicerequestcnt}}
+            {% endfor %}
+    </button></div>
     <div style = "text-align: center">
         <a href = "{% url 'srCreate' %}">Create a service request</a>
     </div>

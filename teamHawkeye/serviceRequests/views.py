@@ -1,4 +1,6 @@
 from django.shortcuts import render
+
+from users.models import Document
 from .models import Request
 from django.contrib.auth.decorators import login_required
 from django.views.generic import (
@@ -94,3 +96,8 @@ def srSearch(request):
 			return render(request, 'serviceRequests/SRHomepage.html')
 	else:
 		return render(request, 'serviceRequests/SRHomepage.html')
+
+
+def show(request):
+	srcount = Document.search()
+	return render(request,"serviceRequests/SRHomepage.html",{'srcount':srcount})
