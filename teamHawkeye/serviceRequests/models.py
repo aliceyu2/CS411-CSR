@@ -40,7 +40,7 @@ class Request(models.Model):
     def clean(self):
         geolocator = Nominatim(user_agent="Team Hawkeye")
         location = geolocator.geocode("{} {} {}".format(self.__dict__['address'], self.__dict__['city'], self.__dict__['state']))
-        if(location == None):
+        if (location == None):
             raise ValidationError({'address': ("This location combination does not exist"), 'city': ("This location combination does not exist"), 'state': ("This location combination does not exist"), 'zipCode': ("This location combination does not exist")})
 
     def get_absolute_url(self):

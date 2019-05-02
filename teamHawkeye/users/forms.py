@@ -50,5 +50,4 @@ class ProfileUpdateForm(forms.ModelForm):
 				self.add_error('city', "This location combination does not exist")
 				self.add_error('state', "This location combination does not exist")
 				self.add_error('zipCode', "This location combination does not exist")
-		
 		return data
