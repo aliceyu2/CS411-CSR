@@ -20,18 +20,7 @@ class Profile(models.Model):
 	cursor.execute('''DROP TRIGGER IF EXISTS ageCheckTrigger''')
 	cursor.execute('''CREATE TRIGGER ageCheckTrigger BEFORE UPDATE ON users_profile FOR EACH ROW BEGIN IF NEW.age < 0 THEN SET NEW.AGE = 0; END IF; END''')
 
-
 	def save(self, *args, **kwargs):
-		#cursor.execute('''DROP TRIGGER teamHawkeye.ageCheckTrigger''')
-		'''
-		requestedAge = Profile.objects.raw('CREATE TRIGGER ageCheckTrigger BEFORE UPDATE ON users_profile ' +
-										'FOR EACH ROW ' + 
-										'BEGIN ' +
-										'IF NEW.age < 0 THEN SET NEW.age = 0;' +
-										'END IF;' + 
-										'END')
-		'''
-		
 		super().save()
 		image = Image.open(self.profile_pic.path)
 		if image.height > 300 or image.width > 300:

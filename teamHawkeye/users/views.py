@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UserRegisterForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
+from geopy.geocoders import Nominatim
+from django.core.exceptions import ValidationError
 
 
 def register(request):
@@ -22,8 +24,8 @@ def profile(request):
 		profile_form = ProfileUpdateForm(request.POST, request.FILES, instance = request.user.profile)
 		if profile_form.is_valid():
 			profile_form.save()
-		messages.success(request, f'Your account has been updated!')
-		return redirect('profile')
+			messages.success(request, f'Your account has been updated!')
+			return redirect('profile')
 	else:
 		profile_form = ProfileUpdateForm(instance = request.user.profile)
 	context = {

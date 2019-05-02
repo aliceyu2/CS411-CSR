@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
 from localflavor.us.us_states import STATE_CHOICES
+from geopy.geocoders import Nominatim
+from django.core.exceptions import ValidationError
 
 
 class UserRegisterForm(UserCreationForm):
@@ -33,3 +35,15 @@ class ProfileUpdateForm(forms.ModelForm):
 			"zipCode": "Zip Code",
 			"profile_pic": "Profile Picture"
 		}
+	
+	def clean(self):
+		data = self.cleaned_data
+		geolocator = Nominatim(user_agent="Team Hawkeye")
+		location = geolocator.geocode("{} {} {}".format(self.data['address'], self.data['city'], self.data['state']))
+		if(location == None):
+			self.add_error('address', "This location combination does not exist")
+			self.add_error('city', "This location combination does not exist")
+			self.add_error('state', "This location combination does not exist")
+			self.add_error('zipCode', "This location combination does not exist")
+		
+		return data
