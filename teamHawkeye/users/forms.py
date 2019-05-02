@@ -38,12 +38,17 @@ class ProfileUpdateForm(forms.ModelForm):
 	
 	def clean(self):
 		data = self.cleaned_data
+		myAddr = self.data['address'].strip()
+		myCity = self.data['city'].strip()
+		myState = self.data['state'].strip()
+		myZip = self.data['zipCode'].strip()
 		geolocator = Nominatim(user_agent="Team Hawkeye")
 		location = geolocator.geocode("{} {} {}".format(self.data['address'], self.data['city'], self.data['state']))
-		if(location == None):
-			self.add_error('address', "This location combination does not exist")
-			self.add_error('city', "This location combination does not exist")
-			self.add_error('state', "This location combination does not exist")
-			self.add_error('zipCode', "This location combination does not exist")
+		if ((myAddr != "") and (myCity != "") and (myState != "") and (myZip != "")):
+			if (location == None):
+				self.add_error('address', "This location combination does not exist")
+				self.add_error('city', "This location combination does not exist")
+				self.add_error('state', "This location combination does not exist")
+				self.add_error('zipCode', "This location combination does not exist")
 		
 		return data
