@@ -1,7 +1,6 @@
 {% extends "serviceRequests/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <h2 style = "text-align: center">This is the SR Homepage</h2>
 	<div class = "container">
 		<div class = "row">
 			<div class = "col-12">
@@ -20,9 +19,9 @@
     <div style = "text-align: center">
         <a href = "{% url 'srCreate' %}">Create a service request</a>
     </div>
-	<!--
-        <h2>searchResult: {{ request.GET.searchResult }}</h2>
-    -->
+    <div style = "text-align: left">
+        <b>&nbsp&nbsp&nbsp&nbspTotal Number of Service Requests: </b>
+    </div>
 	{% if request.GET.searchResult != "" %}
 		{% if results %}
 			{% for result in results %}
