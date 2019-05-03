@@ -8,6 +8,9 @@ from geopy.geocoders import Nominatim
 from django.core.exceptions import ValidationError
 from serviceRequests.AlertThread import distanceCheck
 from threading import Thread
+from django.db import connection
+
+cursor = connection.cursor()
 
 
 class Request(models.Model):
@@ -26,6 +29,9 @@ class Request(models.Model):
     city = models.CharField(max_length = 255, default = "Chicago")
     state = models.CharField(choices = STATE_CHOICES, default = "Illinois", max_length = 255)
     zipCode = models.IntegerField(default = 60661)
+    cursor.execute('''CREATE OR REPLACE VIEW priorityView AS SELECT * FROM serviceRequests_request ORDER BY priority DESC''')
+    # SHOW TABLES;
+    cursor.close()
 
     def save(self, *args, **kwargs):
         if self.pk is None:

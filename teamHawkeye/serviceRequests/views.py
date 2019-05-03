@@ -99,7 +99,7 @@ def srSearch(request):
 			cursor.callproc('numOfServiceRequests')
 			replacement = 'Number of Service Requests: ' + str(cursor.fetchall()[0][0])
 			print('replacement: ' + replacement)
-			# SHOW PROCEDURE STATUS WHERE name LIKE '%%numOfServiceRequests%%';
+			# SHOW PROCEDURE STATUS WHERE name LIKE '%numOfServiceRequests%';
 			cursor.close()
 			return render(request, 'serviceRequests/SRHomepage.html', {'results': results, 'replacement': replacement})
 		else:
