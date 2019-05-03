@@ -18,7 +18,7 @@ def distanceCheck(request=None):
         database="teamHawkeye"
     )
     mycursor = mydb.cursor()
-    sql = "SELECT b.*,a.email FROM auth_user a,users_profile b WHERE a.id = b.user_id AND address IS NOT NULL and email <>'' AND b.user_id <> {}".format(request['user_id'])
+    sql = "SELECT b.*, a.email FROM auth_user a,users_profile b WHERE a.id = b.user_id AND address IS NOT NULL AND email <> '' AND b.user_id <> {}".format(request['user_id'])
 
     mycursor.execute(sql)
     for i in mycursor.fetchall():

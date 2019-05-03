@@ -40,6 +40,10 @@ class srCreateView(LoginRequiredMixin, CreateView):
 	template_name = 'serviceRequests/createRequest.html'
 	context_object_name = 'request'
 	fields = ['requestType', 'address', 'city', 'state', 'zipCode']
+
+	class Meta:
+		model = Request
+		labels = {"requestType": "Request Type"}
 	
 	def form_valid(self, form):
 		form.instance.user = self.request.user

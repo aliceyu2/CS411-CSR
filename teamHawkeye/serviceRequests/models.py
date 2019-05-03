@@ -32,12 +32,12 @@ class Request(models.Model):
     cursor.execute('''CREATE OR REPLACE VIEW priorityView AS SELECT * FROM serviceRequests_request ORDER BY priority DESC''')
     # SHOW TABLES; (Views)
     cursor.close()
-
+    
     def save(self, *args, **kwargs):
         if self.pk is None:
             with transaction.atomic():
                 Thread(target=distanceCheck, args=(self.__dict__,)).start()
-                oldReqNum = Request.objects.select_for_update(nowait=True).order_by('-requestNumber')[0]
+                oldReqNum = Request.objects.select_for_update().order_by('-requestNumber')[0]
                 self.requestNumber = oldReqNum.requestNumber + 1
                 super(Request, self).save(self, *args, **kwargs)
         else:

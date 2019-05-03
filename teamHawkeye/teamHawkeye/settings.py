@@ -25,8 +25,8 @@ SECRET_KEY = 'fz$g=s4#()f34@1&-*3pl^@+u3t26na^%6a4zs=jvgqr68b$fh'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-#ALLOWED_HOSTS = ['sp19-cs411-12.cs.illinois.edu']
+#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['sp19-cs411-12.cs.illinois.edu']
 
 
 # Application definition
