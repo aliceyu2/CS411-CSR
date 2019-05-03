@@ -36,6 +36,7 @@ INSTALLED_APPS = [
 	'users.apps.UsersConfig',
     'serviceRequests.apps.ServicerequestsConfig',
 	'crispy_forms',
+    'easy_maps',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+EASY_MAPS_GOOGLE_KEY = 'AIzaSyBuKuRv10R_klZ_TV_hOuA-5C-ImYE0W_I'
+EASY_MAPS_CENTER = (41.8781, 87.6298)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

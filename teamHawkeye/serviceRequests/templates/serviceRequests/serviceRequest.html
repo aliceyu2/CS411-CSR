@@ -1,6 +1,7 @@
 {% extends "serviceRequests/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+    {% load easy_maps_tags %}
     <article class = "media content-section">
         <div class = "media-body">
             <div class = "article-metadata">
@@ -15,6 +16,7 @@
 				{% endif %}
 			</div>
             <h2 class =  "article-title">{{ request.requestNumber }}</h2>
+            <div id = "map">{% easy_map request.address|add:" "|add:request.city|add:" "|add:request.state %}</div>
             <p class = "article-content">{{ request.status }}</p>
 				<p class = "article-content">{{ request.address }}<br/>{{ request.city }}, {{ request.state }}    {{ request.zipCode }}</p>
         </div>
