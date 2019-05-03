@@ -30,7 +30,7 @@ class Request(models.Model):
     state = models.CharField(choices = STATE_CHOICES, default = "Illinois", max_length = 255)
     zipCode = models.IntegerField(default = 60661)
     cursor.execute('''CREATE OR REPLACE VIEW priorityView AS SELECT * FROM serviceRequests_request ORDER BY priority DESC''')
-    # SHOW TABLES;
+    # SHOW TABLES; (Views)
     cursor.close()
 
     def save(self, *args, **kwargs):
