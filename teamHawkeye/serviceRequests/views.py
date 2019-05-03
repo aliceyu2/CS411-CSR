@@ -12,6 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.db import transaction
 from django.db.models import Q
+from django.db import connection
 import pymysql
 pymysql.install_as_MySQLdb()
 
@@ -77,13 +78,40 @@ def srSearch(request):
 	if request.method == 'GET' and 'searchResult' in request.GET:
 		query = request.GET['searchResult']
 		if query:
+			'''
 			reqNumQ = Q(requestNumber__icontains = query)
 			addrQ = Q(address__icontains = query)
 			cityQ = Q(city__icontains = query)
 			stateQ = Q(state__icontains = query)
 			zipQ = Q(zipCode__icontains = query)
 			results = Request.objects.filter(reqNumQ | addrQ | cityQ | stateQ | zipQ).distinct()
-			return render(request, 'serviceRequests/SRHomepage.html', {'results': results})
+			'''
+			results = []
+
+			cursor = connection.cursor()
+			cursor.execute('''DROP PROCEDURE IF EXISTS numOfServiceRequests;''')
+			
+			if (query.isdigit()):
+				print('number')
+				for result in Request.objects.raw("SELECT * FROM serviceRequests_request WHERE requestNumber = '" + query + "' OR zipCode = '" + query + "'"):
+					results.append(result)
+				cursor.execute("CREATE PROCEDURE numOfServiceRequests() BEGIN SELECT COUNT(*) FROM serviceRequests_request WHERE requestNumber = '" + query + "' OR zipCode = '" + query + "'; END")
+			elif (query.isalpha()):
+				print('string')
+				for result in Request.objects.raw("SELECT * FROM serviceRequests_request WHERE city LIKE '%%" + query + "%%' OR state LIKE '%%" + query + "%%'"):
+					results.append(result)
+				cursor.execute("CREATE PROCEDURE numOfServiceRequests() BEGIN SELECT COUNT(*) FROM serviceRequests_request WHERE city LIKE '%%" + query + "%%' OR state LIKE '%%" + query + "%%'; END")
+			else:
+				print('neither')
+				for result in Request.objects.raw("SELECT * FROM serviceRequests_request WHERE address LIKE '%%" + query + "%%'"):
+					results.append(result)
+				cursor.execute("CREATE PROCEDURE numOfServiceRequests() BEGIN SELECT COUNT(*) FROM serviceRequests_request WHERE address LIKE '%%" + query + "%%'; END")
+			cursor.callproc('numOfServiceRequests')
+			replacement = 'Number of Service Requests: ' + str(cursor.fetchall()[0][0])
+			print('replacement: ' + replacement)
+			# SHOW PROCEDURE STATUS WHERE name LIKE '%%numOfServiceRequests%%';
+			cursor.close()
+			return render(request, 'serviceRequests/SRHomepage.html', {'results': results, 'replacement': replacement})
 		else:
 			return render(request, 'serviceRequests/SRHomepage.html')
 	else:

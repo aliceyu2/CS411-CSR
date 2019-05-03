@@ -4,7 +4,8 @@ from .views import (
 	srDetailView,
 	srCreateView,
 	srUpdateView,
-	srDeleteView
+	srDeleteView,
+	srSearch
 )
 from . import views
 
@@ -13,5 +14,6 @@ urlpatterns  =  [
 	path('<int:pk>/', srDetailView.as_view(), name = 'srDetail'),
 	path('new/', srCreateView.as_view(), name = "srCreate"),
 	path('<int:pk>/update/', srUpdateView.as_view(), name = 'srUpdate'),
-	path('<int:pk>/delete/', srDeleteView.as_view(), name = 'srDelete')
+	path('<int:pk>/delete/', srDeleteView.as_view(), name = 'srDelete'),
+	path('search/', srSearch, name = 'srSearch')
 ]

@@ -1,11 +1,14 @@
 {% extends "serviceRequests/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+    <div style = "text-align: center">
+        <a href = "{% url 'srCreate' %}">Create a service request</a>
+    </div><br/>
 	<div class = "container">
 		<div class = "row">
 			<div class = "col-12">
 				<form class = "input-group" name = "searchPage" action = "{% url 'srSearch' %}" method = "GET" value = "{{ request.GET.searchResult }}">
-					<input class = "form-control border-secondary py-2" name = "searchResult" value = "{{ request.GET.searchResult }}" placeholder = "Search by 1 of the following fields: Request Number, Address, City, State, Zip Code">
+					<input class = "form-control border-secondary py-2" name = "searchResult" value = "{{ request.GET.searchResult }}" placeholder = "Search by ONE of the following fields: Request #, Address, City, State, Zip Code">
 						<div class = "input-group-appdn">
 							<button type = "button" class = "btn btn-info">
 								<span name = "submit" value = "Search" class = "glyphicon glyphicon-search"></span> Search
@@ -15,13 +18,10 @@
 				</form>
 			</div>
 		</div>
-	</div>
-    <div style = "text-align: center">
-        <a href = "{% url 'srCreate' %}">Create a service request</a>
-    </div>
+	</div><br/>
     <div style = "text-align: left">
-        <b>&nbsp&nbsp&nbsp&nbspTotal Number of Service Requests: </b>
-    </div>
+        <b>&nbsp&nbsp&nbsp&nbsp{{ replacement }}</b>
+    </div><br/>
 	{% if request.GET.searchResult != "" %}
 		{% if results %}
 			{% for result in results %}

@@ -19,6 +19,7 @@ class Profile(models.Model):
 	profile_pic = models.ImageField(default = 'default.jpg', upload_to = 'profile_pics')
 	cursor.execute('''DROP TRIGGER IF EXISTS ageCheckTrigger''')
 	cursor.execute('''CREATE TRIGGER ageCheckTrigger BEFORE UPDATE ON users_profile FOR EACH ROW BEGIN IF NEW.age < 0 THEN SET NEW.AGE = 0; END IF; END''')
+	cursor.close()
 
 	def save(self, *args, **kwargs):
 		super().save()
