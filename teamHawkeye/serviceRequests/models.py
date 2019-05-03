@@ -15,14 +15,14 @@ cursor = connection.cursor()
 
 class Request(models.Model):
     REQUEST_TYPES = (
-        ('PH', 'Pot Hole Request'),
-        ('AV', 'Abandoned Vehicle Request'),
+        ('', ''),
+        ('PH', 'Pot Hole Request')
     )
     user = models.ForeignKey(User, on_delete = models.PROTECT)
     requestNumber = models.AutoField(primary_key = True)
     creationDate = models.DateTimeField(default = timezone.now)
     completionDate = models.DateTimeField(null = True, blank = True)
-    requestType = models.CharField(choices = REQUEST_TYPES, default = 'PH', max_length = 255)
+    requestType = models.CharField(choices = REQUEST_TYPES, default = '', max_length = 255)
     status = models.CharField(max_length = 100, default = "In Progress")
     priority = models.IntegerField(default = 1)
     address = models.CharField(max_length = 255, default = "500 W Madison St")
