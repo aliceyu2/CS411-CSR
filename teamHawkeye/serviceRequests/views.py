@@ -78,19 +78,9 @@ def srSearch(request):
 	if request.method == 'GET' and 'searchResult' in request.GET:
 		query = request.GET['searchResult']
 		if query:
-			'''
-			reqNumQ = Q(requestNumber__icontains = query)
-			addrQ = Q(address__icontains = query)
-			cityQ = Q(city__icontains = query)
-			stateQ = Q(state__icontains = query)
-			zipQ = Q(zipCode__icontains = query)
-			results = Request.objects.filter(reqNumQ | addrQ | cityQ | stateQ | zipQ).distinct()
-			'''
 			results = []
-
 			cursor = connection.cursor()
 			cursor.execute('''DROP PROCEDURE IF EXISTS numOfServiceRequests;''')
-			
 			if (query.isdigit()):
 				print('number')
 				for result in Request.objects.raw("SELECT * FROM serviceRequests_request WHERE requestNumber = '" + query + "' OR zipCode = '" + query + "'"):
