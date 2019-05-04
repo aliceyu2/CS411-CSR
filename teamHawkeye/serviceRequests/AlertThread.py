@@ -19,16 +19,22 @@ def distanceCheck(request=None):
     )
     mycursor = mydb.cursor()
     sql = "SELECT b.*, a.email FROM auth_user a,users_profile b WHERE a.id = b.user_id AND address IS NOT NULL AND email <> '' AND b.user_id <> {}".format(request['user_id'])
+    reqID = request['requestNumber']
 
     mycursor.execute(sql)
     for i in mycursor.fetchall():
         print(i)
         userLocation = geolocator.geocode(i[3] + " " + i[4] + " " + i[5])
         if(distance((userLocation.longitude,userLocation.latitude),(location.longitude,location.latitude)).miles < 5):
-            sendAlert(i[10],request)
+            uID = i[0]
+            mycursor.execute('''INSERT INTO serviceRequests_alert (Sent, requestId_id, user_id) VALUES (0, ''' + str(reqID) + ''', ''' + str(uID) + ''')''')
+            mycursor.execute('''START TRANSACTION''')
+            # Transaction
+            mycursor.execute('''UPDATE serviceRequests_alert SET Sent = 1 WHERE requestId_id = ''' + str(reqID) + ''' AND user_id = ''' + str(uID))
+            sendAlert(i[10],request,mycursor)
     mycursor.close()
 
-def sendAlert(email,request):
+def sendAlert(email,request,mycursor):
     subject = 'A 311 service request has been reported in your Area'
     body = "A service Request has beer reported in you area at {} {}, {}".format(request['address'],request['city'], request['state'])
 
@@ -52,6 +58,8 @@ def sendAlert(email,request):
             )
 
         print('Email sent! to ' + str(email))
+        mycursor.execute('''COMMIT''')
     except Exception as e:
         print(e)
+        mycursor.execute('''ROLLBACK''')
     return

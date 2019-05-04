@@ -54,7 +54,7 @@ class Request(models.Model):
 
 class Alert(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    requestId = models.ForeignKey(Request, on_delete=models.PROTECT)
+    requestId = models.ForeignKey(Request, on_delete=models.CASCADE)
     Sent = models.BooleanField(default=False)
     DateSent = models.DateTimeField(null=True,blank=True)
 
