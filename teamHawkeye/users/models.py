@@ -22,7 +22,14 @@ class Profile(models.Model):
 	# SHOW TRIGGERS; (Triggers & Compound Statements)
 	cursor.execute('''DROP TABLE IF EXISTS userInfo''')
 	cursor.execute('''CREATE TABLE userInfo ( myUsername VARCHAR(100) PRIMARY KEY, myFirstName VARCHAR(100), myLastName VARCHAR(100), myAge INT CHECK (myAge >= 0))''')
-    # SHOW TABLES; (Checks)
+	# SHOW TABLES; (Check Constraint)
+	cursor.execute('''START TRANSACTION''')
+	cursor.execute('''INSERT INTO userInfo VALUES ('testUser', 'Test', 'User', 1)''')
+	cursor.execute('''ROLLBACK''')
+	cursor.execute('''START TRANSACTION''')
+	cursor.execute('''INSERT INTO userInfo VALUES ('testUser', 'Test', 'User', 5)''')
+	cursor.execute('''COMMIT''')
+	# (Transactions)
 	cursor.close()
 
 	def save(self, *args, **kwargs):
